@@ -46,6 +46,14 @@ else
 	echo "$NOSUB_PVE already created"
 fi
 
+if [ $APT_UPDATE -gt 0 ]; then
+	apt update
+fi
+
+if [ "$1" = "first-setup" ]; then
+	apt upgrade -y
+fi
+
 echo $NAG_VER | grep -q "\.nag-disabled$" && echo "subscription nag already disabled" && exit 0
 
 if [ -f "$NAG_PATCH" ]; then
@@ -59,8 +67,4 @@ fi
 if [ $CHANGES -lt 1 ]; then
 	echo "no changes, deleting backup file"
 	rm $ARCHIVE
-fi
-
-if [ $APT_UPDATE -gt 0 ]; then
-	apt update
 fi
