@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-ROOT=$(git rev-parse --show-toplevel)
+ROOT=$(dirname $0)
+
 PATCHES="$ROOT/patches"
 APT="/etc/apt/sources.list.d"
 SUB_CEPH="ceph.sources"
@@ -14,7 +15,7 @@ NAG_VER=$(head -n1 $NAG | awk {'print $NF'})
 NAG_PATCH="$PATCHES/nag/$NAG_VER/nonag.patch"
 
 BAK="$ROOT/bak"
-ARCHIVE="$BAK/$(date +%Y-%m-%d.%h-%m-%S).tgz"
+ARCHIVE="$BAK/$(date +%Y-%m-%d.%H-%M-%S).tgz"
 
 CHANGES=0
 APT_UPDATE=0
@@ -60,6 +61,6 @@ if [ $CHANGES -lt 1 ]; then
 	rm $ARCHIVE
 fi
 
-if [ $CHANGES -gt 0 ]; then
+if [ $APT_UPDATE -gt 0 ]; then
 	apt update
 fi
