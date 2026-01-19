@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-set -x
+FLAG=$1
 ROOT=$(dirname $0)
 NONAG="disable_nag.sh"
 NOSUB="swap_ent_nosub.sh"
@@ -17,16 +17,32 @@ APT_UPDATE=0
 
 mkdir $BAK || true
 
+run_script() {
+	set +e
+	bash "$1"
+	RC=$?
+	set -e
+	return $RC
+}
+
 tar cvfz "$ARCHIVE" $NAG $( [ -f "$APT/$SUB_PVE" ] && echo "$APT/$SUB_PVE") $( [ -f "$APT/$SUB_CEPH" ] && echo "$APT/$SUB_CEPH")
 
-if [ $(bash $ROOT/$NOSUB) ]; then
-	CHANGES=1 
+run_script "$ROOT/$NOSUB"
+if [ $? -eq 0 ]; then
+	CHANGES=1
+	apt update
+	if [ "$FLAG" = "first-setup" ]; then
+		apt upgrade -y
+	fi
 else
 	echo "enterprise repos already disabled"
 fi
 
-if [ $(bash $ROOT/$NONAG) ]; then
+run_script "$ROOT/$NONAG"
+
+if [ $? -eq 0 ]; then
 	CHANGES=1
+	systemctl restart pveproxy
 else
 	echo "nag already disabled"
 fi
