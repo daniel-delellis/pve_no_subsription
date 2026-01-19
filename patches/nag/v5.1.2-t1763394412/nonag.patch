@@ -1,0 +1,39 @@
+--- /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.bak	2026-01-18 09:47:39.471294202 -0800
++++ /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js	2026-01-18 10:00:11.435464722 -0800
+@@ -613,6 +613,8 @@
+                         !res ||
+                         res.data.status.toLowerCase() !== 'active'
+                     ) {
++                        orig_cmd();
++                    /*
+                         Ext.Msg.show({
+                             title: gettext('No valid subscription'),
+                             icon: Ext.Msg.WARNING,
+@@ -625,6 +627,7 @@
+                                 orig_cmd();
+                             },
+                         });
++                    */
+                     } else {
+                         orig_cmd();
+                     }
+@@ -1390,7 +1393,8 @@
+                 return (
+                     fmt(
+                         gettext('Production-ready Enterprise repository enabled'),
+-                        'check-circle good',
++                        //'check-circle good',
++                        'exclamation-circle warning',
+                     ) +
+                     ' ' +
+                     fmt(
+@@ -1404,7 +1408,8 @@
+                     ' ' +
+                     fmt(
+                         gettext('Non production-ready repository enabled!'),
+-                        'exclamation-circle warning',
++                        //'exclamation-circle warning',
++                        'check-circle good',
+                     )
+                 );
+             } else if (status === 'no-repo') {
