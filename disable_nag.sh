@@ -10,14 +10,13 @@ noop() {
 
 replace() {
 	mv $1 $JS
-	systemctl restart pveproxy
 }
 
-grep -q "//nag buster" $JS && noop 
+grep -q "//nag buster" $JS && noop
 
-sed -n "1,${HEAD}p" $JS > current 
+sed -n "1,${HEAD}p" $JS > current
 echo "//nag buster!" >> current
-echo "if (true) {orig_cmd(); return;};" >> current
+echo "            orig_cmd(); }, nag_unbusted: function(orig_cmd) {" >> current
 echo "//nag busted!" >> current
 sed -n "${TAIL},\$p" $JS >> current
 
