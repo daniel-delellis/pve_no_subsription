@@ -21,10 +21,14 @@ tar cvfz "$ARCHIVE" $NAG $( [ -f "$APT/$SUB_PVE" ] && echo "$APT/$SUB_PVE") $( [
 
 if [ $(bash $ROOT/$NOSUB) ]; then
 	CHANGES=1 
+else
+	echo "enterprise repos already disabled"
 fi
 
 if [ $(bash $ROOT/$NONAG) ]; then
 	CHANGES=1
+else
+	echo "nag already disabled"
 fi
 
 if [ $CHANGES -lt 1 ]; then
