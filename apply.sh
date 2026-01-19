@@ -12,7 +12,7 @@ NOSUB_PVE="pve-no-subscription.sources"
 
 NAG="/usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js"
 NAG_VER=$(head -n1 $NAG | awk {'print $NF'})
-NAG_PATCH="$PATCHES/nag/$NAG_VER/nonag.patch"
+NAG_PATCH="$PATCHES/pwt/$NAG_VER/nonag.patch"
 
 BAK="$ROOT/bak"
 ARCHIVE="$BAK/$(date +%Y-%m-%d.%H-%M-%S).tgz"
