@@ -10,10 +10,10 @@ NOSUB_CEPH="ceph-no-subscription.sources"
 ENT_PVE="pve-enterprise.sources"
 NOSUB_PVE="pve-no-subscription.sources"
 
-APT_UPDATE=0
+APT_UPDATE=1
 
 edit_sources() {
-	sed 's%https://enterprise%http://download%;s/enterprise/no-subscription/' $1 -i 
+	sed 's%https://enterprise%http://download%;s/enterprise/no-subscription/' $1 -i
 }
 
 check_and_update() {
@@ -22,22 +22,11 @@ check_and_update() {
 	if [ ! -f "$NEW" ]; then
 		edit_sources "$ORIG"
 		mv "$ORIG" "$NEW"
-		APT_UPDATE=1
-	fi
-}
-
-check_apt () {
-	if [ $APT_UPDATE -gt 0 ]; then
-		apt update
-		if [ "$FLAG" = "first-setup" ]; then
-			apt upgrade -y
-		fi
+		APT_UPDATE=0
 	fi
 }
 
 check_and_update $NOSUB_CEPH $ENT_CEPH
 check_and_update $NOSUB_PVE $ENT_PVE
 
-check_apt
-
-exit $([ $APT_UPDATE -gt 0 ])
+exit $APT_UPDATE
