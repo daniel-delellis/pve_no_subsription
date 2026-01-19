@@ -1,39 +1,47 @@
---- /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.bak	2026-01-18 09:47:39.471294202 -0800
-+++ /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js	2026-01-18 10:00:11.435464722 -0800
-@@ -613,6 +613,8 @@
-                         !res ||
-                         res.data.status.toLowerCase() !== 'active'
-                     ) {
-+                        orig_cmd();
-+                    /*
-                         Ext.Msg.show({
-                             title: gettext('No valid subscription'),
-                             icon: Ext.Msg.WARNING,
-@@ -625,6 +627,7 @@
-                                 orig_cmd();
-                             },
-                         });
-+                    */
-                     } else {
-                         orig_cmd();
-                     }
-@@ -1390,7 +1393,8 @@
-                 return (
-                     fmt(
-                         gettext('Production-ready Enterprise repository enabled'),
--                        'check-circle good',
-+                        //'check-circle good',
-+                        'exclamation-circle warning',
-                     ) +
-                     ' ' +
-                     fmt(
-@@ -1404,7 +1408,8 @@
-                     ' ' +
-                     fmt(
-                         gettext('Non production-ready repository enabled!'),
--                        'exclamation-circle warning',
-+                        //'exclamation-circle warning',
-+                        'check-circle good',
-                     )
-                 );
-             } else if (status === 'no-repo') {
+--- /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js	2025-11-17 05:46:52.000000000 -1000
++++ bak/proxmoxlib.js	2026-01-18 21:49:33.025450508 -1000
+@@ -1,4 +1,4 @@
+-// v5.1.2-t1763394412
++// v5.1.2-t1763394412.nag-disabled
+ Ext.ns('Proxmox');
+ Ext.ns('Proxmox.Setup');
+
+@@ -599,37 +599,7 @@
+             Ext.Msg.alert(gettext('Error'), res.htmlStatus || res.result.message),
+
+         checked_command: function (orig_cmd) {
+-            Proxmox.Utils.API2Request({
+-                url: '/nodes/localhost/subscription',
+-                method: 'GET',
+-                failure: function (response, opts) {
+-                    Ext.Msg.alert(gettext('Error'), response.htmlStatus);
+-                },
+-                success: function (response, opts) {
+-                    let res = response.result;
+-                    if (
+-                        res === null ||
+-                        res === undefined ||
+-                        !res ||
+-                        res.data.status.toLowerCase() !== 'active'
+-                    ) {
+-                        Ext.Msg.show({
+-                            title: gettext('No valid subscription'),
+-                            icon: Ext.Msg.WARNING,
+-                            message: Proxmox.Utils.getNoSubKeyHtml(res.data.url),
+-                            buttons: Ext.Msg.OK,
+-                            callback: function (btn) {
+-                                if (btn !== 'ok') {
+-                                    return;
+-                                }
+-                                orig_cmd();
+-                            },
+-                        });
+-                    } else {
+-                        orig_cmd();
+-                    }
+-                },
+-            });
++            orig_cmd();
+         },
+
+         assemble_field_data: function (values, data) {
