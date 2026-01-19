@@ -23,9 +23,6 @@ check_and_update() {
 		edit_sources "$ORIG"
 		mv "$ORIG" "$NEW"
 		APT_UPDATE=1
-		echo "created $NEW"
-	else
-		echo "$NEW already created"
 	fi
 }
 

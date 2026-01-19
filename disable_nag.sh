@@ -5,7 +5,6 @@ HEAD=$((MATCH-2))
 TAIL=$((HEAD+1))
 
 noop() {
-	echo "Nag already disabled"
 	exit 1
 }
 
